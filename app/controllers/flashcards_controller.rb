@@ -35,7 +35,13 @@ class FlashcardsController < ApplicationController
     error_messages = []
 
     flashcards_bundle_update_params[:_json].each do |flashcard|
-      f = Flashcard.find(flashcard[:id])
+      f = Flashcard.find_by(id: flashcard[:id])
+
+      unless f
+        error_messages << 'Some flashcard ids can not be found'
+
+        next
+      end
 
       f_temp = user.flashcards.build(
         front: flashcard[:front],
