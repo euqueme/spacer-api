@@ -81,5 +81,40 @@ RSpec.describe FlashcardsController, type: :controller do
       end
     end
   end
+
+  context 'deleting flashcards' do
+    before :all do
+      User.first.flashcards.create(
+        [
+          {
+            front: 'a or b?',
+            back: 'b'
+          },
+          {
+            front: 'c or d?',
+            back: 'd'
+          }
+        ]
+      )
+    end
+
+    let(:flashcard1) { Flashcard.first }
+    let(:flashcard2) { Flashcard.last }
+
+    describe '#destroy' do
+      it 'deletes several flashcards at once' do
+        previous_count = Flashcard.count
+
+        delete :destroy, params: {
+          ids: [
+            flashcard1.id,
+            flashcard2.id
+          ]
+        }
+
+        expect(previous_count - 2).to eq(Flashcard.count)
+      end
+    end
+  end
 end
 

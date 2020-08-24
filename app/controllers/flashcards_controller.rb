@@ -62,6 +62,13 @@ class FlashcardsController < ApplicationController
     end
   end
 
+  # destroys a bunch of flashcards
+  def destroy
+    User.first.flashcards.where(id: flashcards_destroy_params[:ids]).delete_all
+
+    head :ok
+  end
+
   private
 
   def flashcards_bundle_params
@@ -70,6 +77,10 @@ class FlashcardsController < ApplicationController
 
   def flashcards_bundle_update_params
     params.permit(_json: [:id, :front, :back])
+  end
+
+  def flashcards_destroy_params
+    params.permit(ids: [])
   end
 
 end
