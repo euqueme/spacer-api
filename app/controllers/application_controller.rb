@@ -6,4 +6,5 @@ class ApplicationController < ActionController::API
   def set_format
     request.format = 'json'
   end
+
 end

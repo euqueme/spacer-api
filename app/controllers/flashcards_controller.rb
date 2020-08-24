@@ -2,7 +2,8 @@ class FlashcardsController < ApplicationController
 
   # returns a list with all the filtered flashcards
   def index
-    @flashcards = Flashcard.all
+    user = User.first
+    @flashcards = user.filtered_flashcards(params[:filter])
   end
 
 end
