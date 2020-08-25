@@ -2,9 +2,8 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   concern :api_base do
     resources :users do
-      #resources :measurements
+      #resources :cards
     end
-    #resources :exercises
     post 'login', to: 'authentication#authenticate'
     post 'signup', to: 'users#create'
   end
@@ -12,6 +11,6 @@ Rails.application.routes.draw do
   namespace :v1 do
     concerns :api_base
   end
-
+  get 'current', to: 'application#get_current'
   resources :account_activations, only: [:edit]
 end

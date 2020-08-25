@@ -9,7 +9,7 @@ class User < ApplicationRecord
   # validations
   validates_presence_of :email, :password_digest
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i.freeze
-  validates :email, format: { with: VALID_EMAIL_REGEX }
+  validates :email, :uniqueness => true, format: { with: VALID_EMAIL_REGEX }
     # Sends activation email.
     def send_activation_email
       UserMailer.account_activation(self).deliver_now
