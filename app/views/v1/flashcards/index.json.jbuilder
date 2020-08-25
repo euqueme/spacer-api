@@ -1,2 +1,2 @@
-json.array! @flashcards, :front, :back, :counter
+json.array! @flashcards, :front, :back, :counter, :id
 
