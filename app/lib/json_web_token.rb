@@ -11,7 +11,7 @@ class JsonWebToken
 
   def self.decode(token)
     # get payload; first index in decoded Array
-    body = JWT.decode(token, HMAC_SECRET, true, { algorithm: 'HS256' })[0]
+    body = JWT.decode(token, HMAC_SECRET, false, { algorithm: 'HS256' })[0]
     HashWithIndifferentAccess.new body
     # rescue from all decode errors
   rescue JWT::DecodeError => e
