@@ -11,6 +11,7 @@ class User < ApplicationRecord
   # associations
   has_many :flashcards
 
+  # filters the user flashcards
   def filtered_flashcards(filter)
     case filter
     when 'active'

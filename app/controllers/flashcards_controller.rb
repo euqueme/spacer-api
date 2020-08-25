@@ -71,7 +71,9 @@ class FlashcardsController < ApplicationController
 
   # answers a bunch of flashcards
   def answer
+    user = User.first # this should be current user
     error_messages = []
+    email_sent = Array.new(3, false)
 
     flashcards_bundle_answer_params[:flashcards].each do |flashcard|
       f = Flashcard.find_by(id: flashcard[:id])
@@ -82,8 +84,52 @@ class FlashcardsController < ApplicationController
         next
       end
 
-      if flashcard[:correct] == "true"
-        f.counter += 1
+      if flashcard[:correct] == "true" || flashcard[:correct] == true
+        unless f.mastered?
+          f.counter += 1
+          f.waiting = true
+          f.save
+
+          case f.counter
+          when 1 # first repetition
+            SetWaitingStateJob.set(wait: 5.days).perform_later(f)
+
+            unless email_sent[0]
+              SendReminderEmailsJob.set(
+                wait: 5.days
+              ).perform_later(user.email)
+
+              email_sent[0] = true
+            end
+          when 2 # second repetition, 5 days later (relative to the last one)
+            SetWaitingStateJob.set(wait: 10.days).perform_later(f)
+
+            unless email_sent[1]
+              SendRemainderEmailsJob.set(
+                wait: 10.days
+              ).perform_later(user.email)
+
+              email_sent[1] = true
+            end
+          when 3 # third repetition, 10 days later (relative to the last one)
+            SetWaitingStateJob.set(wait: 14.days).perform_later(f)
+
+            unless email_sent[2]
+              SendRemainderEmailsJob.set(
+                wait: 14.days
+              ).perform_later(user.email)
+
+              email_sent[2] = true
+            end
+          when 4 # fourth repetition, 14 days later (relative to the last one)
+            f.toggle!(:mastered)
+            f.toggle!(:waiting)
+          end
+        end
+      else # we rewind the progress to zero
+        f.counter = 0
+        f.mastered = false if f.mastered?
+        f.waiting = false
         f.save
       end
     end

@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: 'from@example.com'
+  default from: 'spaced-repetition.no-reply@mailgun.net'
   layout 'mailer'
 end
