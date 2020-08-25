@@ -1,17 +1,13 @@
 require 'rails_helper'
 
-RSpec.describe FlashcardsController, type: :controller do
-  before :all do
-    create(:user)
-  end
-
-  context 'Listing flashcards' do
+RSpec.describe V1::FlashcardsController, type: :controller do
+  context 'listing flashcards' do
     describe '#index' do
       before do
-        get :index
+        get :index, params: { filter: 'active' }
       end
 
-      it { should render_template('flashcards/index') }
+      it { should render_template('v1/flashcards/index') }
     end
   end
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_24_172929) do
+ActiveRecord::Schema.define(version: 2020_08_24_193535) do
 
   create_table "flashcards", force: :cascade do |t|
     t.integer "user_id", null: false
@@ -29,6 +29,9 @@ ActiveRecord::Schema.define(version: 2020_08_24_172929) do
     t.string "password_digest"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "activation_digest"
+    t.boolean "activated"
+    t.datetime "activated_at"
   end
 
   add_foreign_key "flashcards", "users"

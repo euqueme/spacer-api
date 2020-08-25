@@ -1,8 +1,9 @@
 # spec/factories/users.rb
 FactoryBot.define do
     factory :user do
-      email { 'bob@example.org' }
+      email { Faker::Internet.email }
       password { 'foobar' }
-      password_confirmation { 'foobar' }
+      activated { true }
+      activated_at { Time.zone.now }
     end
   end
