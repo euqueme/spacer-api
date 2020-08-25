@@ -9,7 +9,7 @@ module V1
       if user.activated?
         auth_token =
           AuthenticateUser.new(auth_params[:email], auth_params[:password]).call
-        json_response(auth_token: auth_token)
+        json_response(Authorization: auth_token)
       else
         json_response({ message: "Activate user first" }, :unprocessable_entity)
       end
