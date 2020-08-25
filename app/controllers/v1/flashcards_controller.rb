@@ -1,5 +1,7 @@
 module V1
   class FlashcardsController < ApplicationController
+    skip_before_action :authorize_request
+
     # returns a list with all the filtered flashcards
     def index
       # this should be current user
