@@ -108,9 +108,14 @@ Rails.application.configure do
     :address        => ENV['MAILGUN_SMTP_SERVER'],
     :user_name      => ENV['MAILGUN_SMTP_LOGIN'],
     :password       => ENV['MAILGUN_SMTP_PASSWORD'],
-    :domain         => 'spacer-repetition-api.heroku.com',
+    :domain         => 'spacer-repetition-api.herokuapp.com',
     :authentication => :plain,
   }
 
   config.action_mailer.delivery_method = :smtp
+
+  config.action_mailer.default_url_options = {
+    host: 'spacer-repetition-api.herokuapp.com',
+    protocol: 'https'
+  }
 end
