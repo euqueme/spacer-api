@@ -22,7 +22,7 @@ class FlashcardsController < ApplicationController
     end
 
     if error_messages.any?
-      render json: { errors: error_messages.unique }, status: :accepted
+      render json: { errors: error_messages.uniq }, status: :accepted
     else
       head :ok
     end
@@ -56,7 +56,7 @@ class FlashcardsController < ApplicationController
     end
 
     if error_messages.any?
-      render json: { errors: error_messages.unique }, status: :accepted
+      render json: { errors: error_messages.uniq }, status: :accepted
     else
       head :ok
     end
@@ -69,7 +69,37 @@ class FlashcardsController < ApplicationController
     head :ok
   end
 
+  # answers a bunch of flashcards
+  def answer
+    error_messages = []
+
+    flashcards_bundle_answer_params[:flashcards].each do |flashcard|
+      f = Flashcard.find_by(id: flashcard[:id])
+
+      unless f
+        error_messages << 'Some flashcard ids can not be found'
+
+        next
+      end
+
+      if flashcard[:correct] == "true"
+        f.counter += 1
+        f.save
+      end
+    end
+
+    if error_messages.any?
+      render json: { errors: error_messages.uniq }, status: :accepted
+    else
+      head :ok
+    end
+  end
+
   private
+
+  def flashcards_bundle_answer_params
+    params.permit(flashcards: [:id, :correct])
+  end
 
   def flashcards_bundle_params
     params.permit(_json: [:front, :back])

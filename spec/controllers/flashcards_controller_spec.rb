@@ -116,5 +116,104 @@ RSpec.describe FlashcardsController, type: :controller do
       end
     end
   end
+
+  context 'answering flashcards' do
+    before :all do
+      User.first.flashcards.create(
+        [
+          {
+            front: 'a or b?',
+            back: 'b'
+          },
+          {
+            front: 'c or d?',
+            back: 'd'
+          },
+          {
+            front: 'e or f?',
+            back: 'e'
+          }
+        ]
+      )
+    end
+
+    let(:flashcards) { Flashcard.first(3) }
+    let(:ids) { Flashcard.select(:id).first(3).map(&:id) }
+
+    context 'all flashcards are correct' do
+      it 'increases the counter for all the flashcards' do
+        patch :answer, params: {
+          flashcards: [
+            {
+              id: ids[0],
+              correct: true
+            },
+            {
+              id: ids[1],
+              correct: true
+            },
+            {
+              id: ids[2],
+              correct: true
+            }
+          ]
+        }
+
+        expect(flashcards.all? do |flashcard|
+          flashcard.reload.counter == 1
+        end).to be_truthy
+      end
+    end
+
+    context 'none of the flashcards is correct' do
+      it 'does not increase the counter for any of the flashcards' do
+        patch :answer, params: {
+          flashcards: [
+            {
+              id: ids[0],
+              correct: false
+            },
+            {
+              id: ids[1],
+              correct: false
+            },
+            {
+              id: ids[2],
+              correct: false
+            }
+          ]
+        }
+
+        expect(flashcards.all? do |flashcard|
+          flashcard.reload.counter.zero?
+        end).to be_truthy
+      end
+    end
+
+    context 'some flashcards are correct' do
+      it 'increases the counter for at least one of the flashcards' do
+        patch :answer, params: {
+          flashcards: [
+            {
+              id: ids[0],
+              correct: true
+            },
+            {
+              id: ids[1],
+              correct: false
+            },
+            {
+              id: ids[2],
+              correct: false
+            }
+          ]
+        }
+
+        expect(flashcards.any? do |flashcard|
+          flashcard.reload.counter == 1
+        end).to be_truthy
+      end
+    end
+  end
 end
 
