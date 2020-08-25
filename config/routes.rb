@@ -11,6 +11,5 @@ Rails.application.routes.draw do
   namespace :v1 do
     concerns :api_base
   end
-  get 'current', to: 'application#get_current'
   resources :account_activations, only: [:edit]
 end

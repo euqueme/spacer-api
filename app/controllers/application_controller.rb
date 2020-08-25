@@ -5,10 +5,6 @@ class ApplicationController < ActionController::API
     # called before every action on controllers
     before_action :authorize_request
     attr_reader :current_user
-
-    def get_current
-      json_response(user: @current_user)
-    end
   
     #private
   
