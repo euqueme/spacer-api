@@ -6,7 +6,7 @@ module V1
     def authenticate
       user = User.find_by(email: params[:email])
 
-      if user.activated?
+      if user&.activated?
         auth_token =
           AuthenticateUser.new(auth_params[:email], auth_params[:password]).call
         json_response(Authorization: auth_token)
