@@ -4,7 +4,7 @@ RSpec.describe 'Authentication', type: :request do
   # Authentication test suite
   describe 'POST /v1/login' do
     # create test user
-    let!(:user) { create(:user) }
+    let(:user) { create(:user) }
     # set headers for authorization
     let(:headers) { valid_headers.except('Authorization') }
     # set test valid and invalid credentials
@@ -29,7 +29,7 @@ RSpec.describe 'Authentication', type: :request do
       before { post '/v1/login', params: valid_credentials, headers: headers }
 
       it 'returns an authentication token' do
-        expect(json['auth_token']).not_to be_nil
+        expect(json['Authorization']).not_to be_nil
       end
     end
 
@@ -38,7 +38,7 @@ RSpec.describe 'Authentication', type: :request do
       before { post '/v1/login', params: invalid_credentials, headers: headers }
 
       it 'returns a failure message' do
-        expect(json['message']).to match(/Invalid credentials/)
+        expect(json['message']).to match(/activate user first/i)
       end
     end
   end
