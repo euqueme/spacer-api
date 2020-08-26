@@ -246,6 +246,7 @@ DEPENDENCIES
   rack-cors
   rails (~> 6.0.3, >= 6.0.3.1)
   rails-controller-testing
+  redis (~> 4.0)
   rspec-rails!
   rspec_api_documentation
   rubocop-faker
