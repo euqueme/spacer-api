@@ -2,8 +2,8 @@ class FlashcardsMailer < ApplicationMailer
   def notify_repetition_success
     @url = url_for(
       protocol: 'https',
-      host: 'spaced-repetition-api',
-      controller: 'flashcards',
+      host: 'spaced-repetition-api.herokuapp.com',
+      controller: 'v1/flashcards',
       action: 'index'
     )
 
