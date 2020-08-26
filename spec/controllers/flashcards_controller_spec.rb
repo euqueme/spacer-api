@@ -1,13 +1,22 @@
 require 'rails_helper'
 
 RSpec.describe V1::FlashcardsController, type: :controller do
+  before :all do
+    user = create(:user)
+    @token = AuthenticateUser.new(user.email, 'foobar').call
+  end
+
+  before :each do
+    request.headers['Authorization'] = @token
+  end
+
   context 'listing flashcards' do
     describe '#index' do
       before do
         get :index, params: { filter: 'active' }
       end
 
-      it { should render_template('v1/flashcards/index') }
+      it { should render_template }
     end
   end
 
